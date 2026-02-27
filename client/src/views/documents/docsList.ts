@@ -1,10 +1,8 @@
-import { UserDto } from "@db/api"
+import { DocumentDto } from "@db/api"
 import {LitElement, css, html} from "lit"
 import {customElement, state} from "lit/decorators.js"
-import { openUserDialog } from "./userDetails.js"
-import * as userService from "@db/client/views/users/userService.js"
+import * as userService from "@db/client/views/documents/docsService.js"
 
-//import { openMigrationDialog } from "./migration/dialogOpener.js"
 
 @customElement("users-list")
 export class UsersList extends LitElement {
@@ -31,7 +29,7 @@ export class UsersList extends LitElement {
 		this.get()
 	}
 	@state()
-	result?: Array<UserDto>
+	result?: Array<DocumentDto>
 
 	@state()
 	showStorage = false
@@ -65,10 +63,7 @@ export class UsersList extends LitElement {
 				<table>
 					<thead>
 						<tr>
-							<th></th>
-							<th>UserName</th>
-							<th>Name</th>
-							<th>Email</th>
+							<th>Title</th>
 							<th></th>
 						</tr>
 					</thead>
@@ -76,12 +71,9 @@ export class UsersList extends LitElement {
 						${this.result.map(u => {
 							return html`
 								<tr>
-									<td></td>
-									<td>${u.userName}</td>
-									<td>${u.fullName}</td>
-									<td>${u.email}</td>
+									<td>${u.title}</td>
 									<td>
-										<wa-button variant="neutral" appearance="filled" @click=${() => openUserDialog(u)}>
+										<wa-button variant="neutral" appearance="filled">
 											<wa-icon name="pen-to-square" variant="regular"></wa-icon>
 										</wa-button>
 									</td>
