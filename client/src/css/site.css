@@ -1,0 +1,67 @@
+﻿
+/* Error and validation common between Login and Login/Error */
+div.validation-messages {
+    background-color: var(--digilean-logo-error-color-light);
+    border-radius: 0.25rem;
+    color: var(--digilean-logo-error-color);
+    margin-top: 2rem;
+    padding: 0.3rem;
+}
+.validation-summary-errors>ul {
+    margin-bottom: 0;
+    margin-block-start: 0.2rem;
+    padding-inline-start: 0.2rem;;
+    list-style: none;
+}
+
+.login-link a, .login-link a:hover {
+    color: white;
+    text-decoration: underline;
+}
+.contact-link a, .contact-link a:hover {
+    color: white;
+    text-decoration: underline;
+}
+.login-link a:hover, .contact-link a:hover {
+    cursor: pointer;
+}
+
+#passwordless-form, #passwordless-form input {
+    width: 400px;
+}
+#passwordless-result {
+    max-width: 80vw;
+    word-break: break-all;
+}
+.login.btn a {
+    color: var(--wa-color-text-normal);
+}
+
+.info-text {
+    color: var(--wa-color-text-normal);
+}
+.important-text {
+    text-decoration: underline;
+}
+
+.alert-warning {
+    background: var(--wa-color-warning-fill-normal);
+    color: var(--wa-color-warning-on-normal);
+}
+.alert-danger {
+    background: var(--wa-color-danger-fill-normal);
+    color: var(--wa-color-danger-on-normal);
+}
+
+a {
+    color: var(--wa-color-text-normal);
+    text-decoration: underline;
+}
+
+div.row {
+    margin-top: 2rem;
+    display: flex;
+    div.grow {
+        flex: auto 1 1;
+    }
+}

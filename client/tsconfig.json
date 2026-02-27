@@ -1,0 +1,33 @@
+{
+    "exclude": ["vite.config.ts", "generation/*"],
+    "compilerOptions": {
+        "target": "esnext",
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
+        "lib": [
+            "ESNext",
+            "DOM",
+            "DOM.Iterable"
+        ],
+        "declaration": true,
+        "noEmit": true,
+        "outDir": "dist",
+        "rootDir": ".",
+        "strict": true,
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "skipLibCheck": true,
+        "baseUrl": ".",
+        "paths": {
+            "@db/client/*": [
+                "src/*",
+            ],
+            "@db/api": [
+                "api/index.ts",
+            ]
+        },
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": false,
+        "useDefineForClassFields": false
+    }
+}
