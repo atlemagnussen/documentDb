@@ -15,7 +15,7 @@ let oicdConfig: UserManagerSettings = {
     scope:"openid profile doc",
     loadUserInfo: true,
     post_logout_redirect_uri: rootPath,
-    userStore: new WebStorageStateStore({ store: window.sessionStorage }),
+    userStore: new WebStorageStateStore({ store: window.localStorage }),
     accessTokenExpiringNotificationTimeInSeconds: 60,
     silentRequestTimeoutInSeconds: 20000,
     automaticSilentRenew: false,
