@@ -1,10 +1,10 @@
 import { DocumentDto } from "@db/api"
 import {LitElement, css, html} from "lit"
 import {customElement, state} from "lit/decorators.js"
-import * as userService from "@db/client/views/documents/docsService.js"
+import * as docService from "@db/client/views/documents/docsService.js"
 
 
-@customElement("users-list")
+@customElement("docs-list")
 export class UsersList extends LitElement {
 
 	static styles = css`
@@ -40,8 +40,8 @@ export class UsersList extends LitElement {
 
 	get = async () => {
 		try {
-			const dbs = await userService.getUsers()
-			this.result = dbs
+			const docs = await docService.list()
+			this.result = docs
 		} catch (err: any) {
 			this.result = err.message
 		}

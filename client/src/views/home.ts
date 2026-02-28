@@ -15,6 +15,9 @@ export class HomeView extends LitElement {
       <div>
         <p>Home</p>
       </div>
+      <div>
+        <docs-list></docs-list>
+      </div>
     `
   }
 }
