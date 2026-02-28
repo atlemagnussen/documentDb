@@ -30,4 +30,11 @@ public class DocumentsController : ControllerBase
         var doc = await  _service.Get(id);
         return DocumentsTranslate.From(doc);
     }
+
+    [HttpPut("{id}")]
+    public async Task<DocumentDto> Update(int id, [FromBody] DocumentDto updateDoc)
+    {
+        var doc = await  _service.Update(id, updateDoc);
+        return DocumentsTranslate.From(doc);
+    }
 }

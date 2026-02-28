@@ -1,29 +1,19 @@
-import { LitElement, css, html } from "lit"
-import { customElement, state } from "lit/decorators.js"
-import { userState } from "@db/client/services/user.js"
+import { css, html } from "lit"
+import { customElement } from "lit/decorators.js"
 import auth from "@db/client/services/authentication.js"
-import { effect } from "@db/client/services/effect.js"
+import { AuthUserElement } from "../components/AuthUserElement.js"
 
 @customElement('home-view')
-export class HomeView extends LitElement {
+export class HomeView extends AuthUserElement {
 
   static styles = css`
     :host {
       display: block;
     }
   `
-  @state()
-  userName?: string
 
-  connectedCallback(): void {
-    super.connectedCallback()
-    effect(() => {
-      const authUser = userState.get()
-      this.userName = authUser.userName
-    })
-  }
   render() {
-    if (!this.userName) {
+    if (!this.user.userName) {
       return html`
         <p>Not logged in</p>
         <button @click=${() => auth.login()}>Log in</button>
@@ -31,10 +21,13 @@ export class HomeView extends LitElement {
     }
     return html`
       <div> Logged in: 
-        ${this.userName}
+        ${this.user.userName}
       </div>
       <div>
-        <docs-list></docs-list>
+        AccessToken: ${this.user.accessToken}
+      </div>
+      <div>
+        <a href="/documents">Documents</a>
       </div>
     `
   }

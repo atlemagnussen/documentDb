@@ -1,5 +1,5 @@
 import { DocumentDto } from "@db/api"
-import {LitElement, css, html} from "lit"
+import {css, html, LitElement} from "lit"
 import {customElement, state} from "lit/decorators.js"
 import * as docService from "@db/client/views/documents/docsService.js"
 

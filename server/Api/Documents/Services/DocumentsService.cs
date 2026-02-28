@@ -29,4 +29,16 @@ public class DocumentsService
         
         return doc;
     }
+
+    public async Task<Document> Update(int id, DocumentDto dto)
+    {
+        var doc = await Documents.FirstOrDefaultAsync(d => d.Id == id) 
+            ?? throw new NotFoundException($"{id} not found");
+        
+        doc.Title = dto.Title;
+        doc.Content = dto.Content;
+
+        await _context.SaveChangesAsync();
+        return doc;
+    }
 }
