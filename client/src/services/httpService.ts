@@ -6,14 +6,18 @@ import { effect } from "@db/client/services/effect.js"
 export default class HttpService {
 
   BaseUrl = window.location.origin
+  BasePath = ""
   AccessToken?: string
-
+  
   /**
    *
    */
-  constructor (baseUrl: string) {
-    if (baseUrl)
-      this.BaseUrl = baseUrl
+  constructor (basePath: string) {
+    if (basePath) {
+      this.BasePath = basePath
+      this.BaseUrl = `${this.BaseUrl}/${this.BasePath}`
+    }
+
     effect(() => {
       const authUser = userState.get()
       this.AccessToken = authUser.accessToken

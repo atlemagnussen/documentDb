@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.Extensions.FileProviders;
 using DocumentSys.Api;
 using DocumentSys.Observability;
 using DocumentSys.Auth;
@@ -39,7 +40,24 @@ var app = builder.Build();
 app.UseForwardedHeaders();
 
 app.UseHttpsRedirection();
-app.UseFileServer();
+app.UseFileServer(new FileServerOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(app.Environment.ContentRootPath, "wwwroot")),
+    EnableDefaultFiles = true,
+    StaticFileOptions =
+    {
+        OnPrepareResponse = context =>
+        {
+            var fileName = context.File.Name;
+            // if (string.Equals(fileName, "index.html", StringComparison.OrdinalIgnoreCase))
+            // {
+            context.Context.Response.Headers.CacheControl = "no-cache";
+            return;
+            //}
+            //context.Context.Response.Headers.CacheControl = "public,max-age=31536000,immutable";
+        }
+    }
+});
 //app.UseStaticFiles();
 
 app.UseAuthentication();
@@ -56,5 +74,6 @@ else
 app.UseExceptionHandler();
 
 app.MapControllers();
+app.MapFallbackToFile("index.html");
 
 app.Run();

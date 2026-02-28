@@ -5,7 +5,7 @@ import * as docService from "@db/client/views/documents/docsService.js"
 import { unsafeHTML } from "lit/directives/unsafe-html.js"
 
 
-@customElement("doc-details")
+@customElement("doc-edit")
 export class UsersList extends LitElement {
 
   static styles = css`
@@ -26,27 +26,41 @@ export class UsersList extends LitElement {
   @state()
   doc?: DocumentDto
 
-  @state()
-  error?: Error
-
   get = async () => {
     if (!this.docid)
       return
     try {
       const doc = await docService.get(this.docid)
       this.doc = doc
+      this.contentEdit = doc.content
     } catch (err: any) {
-      this.error = err
+      console.error(err)
     }
   }
 
+  contentEdit?: string | null
+  contentUpdate(e: InputEvent) {
+    if (e.target) {
+      const newContent = (e.target as HTMLDivElement).innerHTML
+      this.contentEdit = newContent
+    }
+  }
+  saveDoc() {
+    if (!this.docid || !this.doc)
+      return
+    const doc:DocumentDto = {
+      id: this.docid,
+      title: this.doc?.title,
+      content: this.contentEdit
+    }
+    docService.update(this.docid, doc)
+  }
   render() {
     if (!this.doc) {
       return html`
         <div>
           <p>No result</p>
-          <button @click=${this.get}>Get doc</button>
-          <error-viewer .error=${this.error}></error-viewer>
+          <button @click=${this.get}>Get Dbs</button>
         </div>
         `
     }
@@ -56,9 +70,13 @@ export class UsersList extends LitElement {
         ${this.doc.title}
       </section>
       <section>
-        ${unsafeHTML(this.doc.content)}
+        <div contenteditable @input=${(e: InputEvent) => this.contentUpdate(e)}>
+${unsafeHTML(this.contentEdit)}
+        </div>
       </section>
-      
+      <wa-button variant="neutral" appearance="filled" @click=${this.saveDoc}>
+        <wa-icon name="floppy-disk" variant="regular"></wa-icon>
+      </wa-button>
     `
   }
 }

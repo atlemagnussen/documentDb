@@ -10,6 +10,7 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
+    "start": "npm run watch",
     "build": "vite build",
     "watch": "tsc && vite build --watch",
     "ts": "tsc --build",

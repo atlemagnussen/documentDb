@@ -42,9 +42,12 @@ export class UsersList extends LitElement {
 			const docs = await docService.list()
 			this.result = docs
 		} catch (err: any) {
-			this.result = err.message
+			this.error = err
 		}
 	}
+
+  @state()
+  error?: Error
 
 	render() {
 		if (!this.result) {
@@ -52,13 +55,14 @@ export class UsersList extends LitElement {
 			<div>
 				<p>No result</p>
 				<button @click=${this.get}>Get Dbs</button>
+        <error-viewer .error=${this.error}></error-viewer>
 			</div>
 			`
 		}
 
 		return html`
 			<section>
-				<h3>Users</h3>
+				<h3>Docs</h3>
 				<table>
 					<thead>
 						<tr>
@@ -70,9 +74,13 @@ export class UsersList extends LitElement {
 						${this.result.map(u => {
 							return html`
 								<tr>
-									<td>${u.title}</td>
 									<td>
-										<wa-button href="/documents/${u.id}" variant="neutral" appearance="filled">
+                    <a href="/documents/${u.id}">
+                      ${u.title}
+                    </a>
+                  </td>
+									<td>
+										<wa-button href="/documents/${u.id}/edit" variant="neutral" appearance="filled">
 											<wa-icon name="pen-to-square" variant="regular"></wa-icon>
 										</wa-button>
 									</td>

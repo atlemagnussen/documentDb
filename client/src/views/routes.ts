@@ -22,6 +22,15 @@ export const routes: Array<RouteConfig> = [
         }
     },
     {
+        name: "documentEdit",
+        path: "/documents/:id/edit",
+        render: ({id}) => {
+            if (!id)
+                return html`<p>Loading</p>`
+            return html`<doc-edit docid="${id}"></doc-edit>`
+        }
+    },
+    {
         name: "notfound",
         path: "*",
         render: () => html`<p>Not found</p>`
