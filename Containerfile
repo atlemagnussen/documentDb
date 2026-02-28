@@ -7,7 +7,7 @@ EXPOSE 8080
 FROM node:24-slim AS buildnode
 
 WORKDIR /usr/build
-COPY UserAdmin/client .
+COPY client .
 RUN mkdir -p ../server/wwwroot
 
 WORKDIR /usr/build/client
@@ -20,18 +20,18 @@ WORKDIR /src
 COPY . .
 
 RUN mkdir -p UserAdmin/server/wwwroot
-WORKDIR "/src/UserAdmin/server/wwwroot"
+WORKDIR "/src/server/wwwroot"
 COPY --from=buildnode /usr/server/wwwroot .
 
-WORKDIR "/src/UserAdmin/server"
-RUN dotnet build "./UserAdmin.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/server"
+RUN dotnet build "./DocumentsDb.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./UserAdmin.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./DocumentsDb.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
-ENTRYPOINT ["dotnet", "UserAdmin.dll"]
+ENTRYPOINT ["dotnet", "DocumentsDb.dll"]

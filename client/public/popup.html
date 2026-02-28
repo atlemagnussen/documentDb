@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Signing in</title>
+    <script type="importmap">
+        {
+            "imports": {
+                "oidc-client-ts": "https://esm.sh/oidc-client-ts@3.3.0"
+            }
+        }
+    </script>
+    <style>
+        html {
+            font-size: 16px;
+        }
+        body {
+            background-color: #601ec3;
+            font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            color: #EEE;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+        }
+        main header {
+            margin-top: 1rem;
+            display: flex;
+            flex-direction: row;
+            gap: 2rem;
+        }
+        .info {
+            color: #CCC;
+        }
+        .error {
+            display: inline-block;
+            border: 0.6rem solid #ed5565;
+            margin: 2rem 0;
+            padding: 2rem;
+        }
+        .error .msg {
+            font-weight: 1000;
+        }
+        a {
+            color: #FFF;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <header>
+            <p class="info">Logging in popup</p>
+        </header>
+        <section id="error-message"></section>
+    </main>
+    <script src="popup.js" type="module"></script>
+</body>
+</html>

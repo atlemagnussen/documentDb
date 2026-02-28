@@ -1,8 +1,12 @@
 const jsonContentType = "application/json"
+import { userState } from "@db/client/services/user.js"
+import { effect } from "@db/client/services/effect.js"
+
 
 export default class HttpService {
 
   BaseUrl = window.location.origin
+  AccessToken?: string
 
   /**
    *
@@ -10,6 +14,10 @@ export default class HttpService {
   constructor (baseUrl: string) {
     if (baseUrl)
       this.BaseUrl = baseUrl
+    effect(() => {
+      const authUser = userState.get()
+      this.AccessToken = authUser.accessToken
+    })
   }
   /**
    * @param {string} urlPath - only path and not baseurl/host
@@ -51,7 +59,7 @@ export default class HttpService {
    */
   createRequest = (url: string, method: string, contentType?: string, data?: object) => {
     contentType ??= jsonContentType
-    const headers = getHeaders(contentType)
+    const headers = getHeaders(contentType, this.AccessToken)
     const args: RequestInit = {
       credentials: "include",
       method,
@@ -121,11 +129,13 @@ async function resHandler(res: Response) {
   }
 }
 
-function getHeaders(contentType: string) {
+function getHeaders(contentType: string, accessToken?: string) {
   const headers: HeadersInit = {}
   if (contentType)
     headers["Content-Type"] = contentType
 
+  if (accessToken)
+    headers["Authorization"] = `Bearer ${accessToken}`
   return headers
 }
 

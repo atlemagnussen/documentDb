@@ -1,12 +1,12 @@
-import { signal } from '@lit-labs/signals';
-import { User } from 'oidc-client-ts';
+import { Signal } from "signal-polyfill"
+import { User } from "oidc-client-ts"
 
 export interface AuthUser {
     accessToken?: string
     userName?: string
 }
 
-const userState = signal<AuthUser>({})
+export const userState = new Signal.State<AuthUser>({})
 
 export function setAuthUser(oidcUser: User) {
     const authUser: AuthUser = { accessToken: oidcUser.access_token, userName: oidcUser.profile.name }
