@@ -15,7 +15,11 @@ export const routes: Array<RouteConfig> = [
     {
         name: "documentDetails",
         path: "/documents/:id",
-        render: ({id}) => html`<doc-details id="${id}"></doc-details>`
+        render: ({id}) => {
+            if (!id)
+                return html`<p>Loading</p>`
+            return html`<doc-details docid="${id}"></doc-details>`
+        }
     },
     {
         name: "notfound",

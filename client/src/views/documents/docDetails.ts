@@ -20,17 +20,16 @@ export class UsersList extends LitElement {
   }
 
   @property({ attribute: true })
-  id = ""
+  docid?: string
 
   @state()
   doc?: DocumentDto
 
-
   get = async () => {
-    if (!this.id)
+    if (!this.docid)
       return
     try {
-      const doc = await docService.get(this.id)
+      const doc = await docService.get(this.docid)
       this.doc = doc
     } catch (err: any) {
       console.error(err)

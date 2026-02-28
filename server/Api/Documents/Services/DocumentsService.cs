@@ -16,9 +16,9 @@ public class DocumentsService
 
     private IQueryable<Document> Documents => _context.Documents;
 
-    public async Task<IEnumerable<Document>> List()
+    public async Task<List<Document>> List()
     {
-        var docs = await Documents.ToArrayAsync();
+        var docs = await Documents.ToListAsync();
         return docs;
     }
 

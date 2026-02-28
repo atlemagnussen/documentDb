@@ -1,8 +1,7 @@
-import { DocumentDto } from "@db/api"
+import { DocumentListDto } from "@db/api"
 import {css, html, LitElement} from "lit"
 import {customElement, state} from "lit/decorators.js"
 import * as docService from "@db/client/views/documents/docsService.js"
-
 
 @customElement("docs-list")
 export class UsersList extends LitElement {
@@ -29,7 +28,7 @@ export class UsersList extends LitElement {
 		this.get()
 	}
 	@state()
-	result?: Array<DocumentDto>
+	result?: Array<DocumentListDto>
 
 	@state()
 	showStorage = false
@@ -73,7 +72,7 @@ export class UsersList extends LitElement {
 								<tr>
 									<td>${u.title}</td>
 									<td>
-										<wa-button variant="neutral" appearance="filled">
+										<wa-button href="/documents/${u.id}" variant="neutral" appearance="filled">
 											<wa-icon name="pen-to-square" variant="regular"></wa-icon>
 										</wa-button>
 									</td>

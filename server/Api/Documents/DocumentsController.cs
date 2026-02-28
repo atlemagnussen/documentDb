@@ -18,10 +18,10 @@ public class DocumentsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IEnumerable<DocumentDto>> List()
+    public async Task<IEnumerable<DocumentListDto>> List()
     {
         var docs = await _service.List();
-        return [.. docs.Select(d => DocumentsTranslate.From(d))];
+        return DocumentsTranslate.List(docs);
     }
 
     [HttpGet("{id}")]
