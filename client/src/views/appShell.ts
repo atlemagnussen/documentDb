@@ -22,8 +22,8 @@ export class UsersList extends LitElement {
       flex-direction: row;
       padding: var(--wa-space-2xs);
       overflow: hidden;
+      background-color: var(--wa-color-surface-raised);
       nav {
-        background-color: var(--wa-color-surface-raised);
         width: 100%;
         display: flex;
         justify-content: space-around;
