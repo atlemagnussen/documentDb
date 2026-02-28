@@ -16,3 +16,6 @@ values (2, 'email')
 
 insert Into public."ApiResourceClaims" ("ApiResourceId", "Type")
 values (2, 'name')
+
+insert into public."ApiScopeClaims" ("ScopeId", "Type")
+values (2, 'role')
