@@ -1,12 +1,12 @@
 import { DocumentDto } from "@db/api"
-import { LitElement, css, html } from "lit"
+import { css, html } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
 import * as docService from "@db/client/views/documents/docsService.js"
-import { unsafeHTML } from "lit/directives/unsafe-html.js"
+import { AuthUserElement } from "@db/client/components/AuthUserElement.js"
 
 
 @customElement("doc-edit")
-export class UsersList extends LitElement {
+export class UsersList extends AuthUserElement {
 
   static styles = css`
     :host {
@@ -34,16 +34,14 @@ export class UsersList extends LitElement {
       this.doc = doc
       this.contentEdit = doc.content
     } catch (err: any) {
-      console.error(err)
+      this.error = err
     }
   }
 
   contentEdit?: string | null
-  contentUpdate(e: InputEvent) {
-    if (e.target) {
-      const newContent = (e.target as HTMLDivElement).innerHTML
-      this.contentEdit = newContent
-    }
+
+  onContentChange(e: CustomEvent<{ html: string }>) {
+    this.contentEdit = e.detail.html
   }
   saveDoc() {
     if (!this.docid || !this.doc)
@@ -60,20 +58,21 @@ export class UsersList extends LitElement {
       return html`
         <div>
           <p>No result</p>
-          <button @click=${this.get}>Get Dbs</button>
+          <button @click=${this.get}>Get doc</button>
+          <error-viewer .error=${this.error}></error-viewer>
         </div>
-        `
+      `
     }
 
     return html`
       <section>
         ${this.doc.title}
       </section>
-      <section>
-        <div contenteditable @input=${(e: InputEvent) => this.contentUpdate(e)}>
-${unsafeHTML(this.contentEdit)}
-        </div>
-      </section>
+      <label>Edit</label>
+      <rich-text
+        .content=${this.contentEdit ?? ""}
+        @content-change=${this.onContentChange}
+      ></rich-text>
       <wa-button variant="neutral" appearance="filled" @click=${this.saveDoc}>
         <wa-icon name="floppy-disk" variant="regular"></wa-icon>
       </wa-button>

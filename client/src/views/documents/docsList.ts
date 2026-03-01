@@ -1,10 +1,11 @@
 import { DocumentListDto } from "@db/api"
-import {css, html, LitElement} from "lit"
+import {css, html} from "lit"
 import {customElement, state} from "lit/decorators.js"
 import * as docService from "@db/client/views/documents/docsService.js"
+import { AuthUserElement } from "@db/client/components/AuthUserElement.js"
 
 @customElement("docs-list")
-export class UsersList extends LitElement {
+export class UsersList extends AuthUserElement {
 
 	static styles = css`
 		tbody { 
@@ -45,9 +46,6 @@ export class UsersList extends LitElement {
 			this.error = err
 		}
 	}
-
-  @state()
-  error?: Error
 
 	render() {
 		if (!this.result) {

@@ -7,11 +7,14 @@ export class AuthUserElement extends LitElement {
     @state()
     user: AuthUser = { }
 
+    @state()
+    error?: Error
+    
     connectedCallback(): void {
-        super.connectedCallback()
-        effect(() => {
-          const authUser = userState.get()
-          this.user = authUser
-        })
-      }
+      super.connectedCallback()
+      effect(() => {
+        const authUser = userState.get()
+        this.user = authUser
+      })
+    }
 }

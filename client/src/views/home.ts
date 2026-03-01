@@ -24,7 +24,7 @@ export class HomeView extends AuthUserElement {
         ${this.user.userName}
       </div>
       <div>
-        AccessToken: ${this.user.accessToken}
+        <p>&nbsp;</p>
       </div>
       <div>
         <a href="/documents">Documents</a>
