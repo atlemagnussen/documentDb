@@ -18,6 +18,11 @@ public class DocumentsDbContext : DbContext
         {
             entity.Property(e => e.Title).HasMaxLength(255);
             entity.Property(e => e.Content).HasColumnType("text");
+            entity.Property(e => e.CreatedAt)
+                .HasColumnType("timestamptz")
+                .HasDefaultValueSql("now()");
+            entity.Property(e => e.CreatedByUserId)
+                .HasMaxLength(36);
         });
     }
 }

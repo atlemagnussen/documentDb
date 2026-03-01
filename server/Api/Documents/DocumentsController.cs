@@ -1,5 +1,6 @@
 using DocumentSys.Api.Documents.Models;
 using DocumentSys.Api.Documents.Services;
+using DocumentSys.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -31,8 +32,16 @@ public class DocumentsController : ControllerBase
         return DocumentsTranslate.From(doc);
     }
 
+    [HttpPost]
+    public async Task<DocumentDto> Create(DocumentCreateDto createDto)
+    {
+        var userId = User.GetUserId();
+        var doc = await _service.Create(createDto, userId);
+        return DocumentsTranslate.From(doc);
+    }
+    
     [HttpPut("{id}")]
-    public async Task<DocumentDto> Update(int id, [FromBody] DocumentDto updateDoc)
+    public async Task<DocumentDto> Update(int id, [FromBody] DocumentUpdateDto updateDoc)
     {
         var doc = await  _service.Update(id, updateDoc);
         return DocumentsTranslate.From(doc);

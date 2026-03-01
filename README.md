@@ -11,5 +11,6 @@ dotnet tool update --global dotnet-ef
 ### manage
 
 dotnet ef migrations add InitialCreatePostgres
+dotnet ef migrations add AddDocumentCreatedMetadata
 
 dotnet ef database update

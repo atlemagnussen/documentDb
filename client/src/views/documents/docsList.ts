@@ -1,8 +1,9 @@
 import { DocumentListDto } from "@db/api"
 import {css, html} from "lit"
-import {customElement, state} from "lit/decorators.js"
+import {customElement, query, state} from "lit/decorators.js"
 import * as docService from "@db/client/views/documents/docsService.js"
 import { AuthUserElement } from "@db/client/components/AuthUserElement.js"
+import WaInput from "@awesome.me/webawesome/dist/components/input/input.js"
 
 @customElement("docs-list")
 export class UsersList extends AuthUserElement {
@@ -47,6 +48,15 @@ export class UsersList extends AuthUserElement {
 		}
 	}
 
+  @query("wa-input")
+  newTitleinput?: WaInput
+
+  async createNew() {
+    if (this.newTitleinput && this.newTitleinput.value) {
+      await docService.create({ title: this.newTitleinput.value})
+      this.get()
+    }
+  }
 	render() {
 		if (!this.result) {
 			return html`
@@ -77,17 +87,24 @@ export class UsersList extends AuthUserElement {
                       ${u.title}
                     </a>
                   </td>
-									<td>
-										<wa-button href="/documents/${u.id}/edit" variant="neutral" appearance="filled">
-											<wa-icon name="pen-to-square" variant="regular"></wa-icon>
-										</wa-button>
-									</td>
-								</tr>
-							`
-						})}
+				          <td>
+					          <wa-button href="/documents/${u.id}/edit" variant="neutral" appearance="filled">
+						          <wa-icon name="pen-to-square" variant="regular"></wa-icon>
+					          </wa-button>
+				          </td>
+			          </tr>
+		          `
+	          })}
 					</tbody>
 				</table>
 			</section>
+      <section>
+        <h3>Create New</h3>
+        <wa-input label="Title"></wa-input>
+        <wa-button variant="neutral" appearance="filled" @click=${this.createNew}>
+          <wa-icon name="circle-plus"></wa-icon>
+        </wa-button>
+      </section>
 		`
 	}
 }

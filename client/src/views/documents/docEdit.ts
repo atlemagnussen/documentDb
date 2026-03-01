@@ -1,4 +1,4 @@
-import { DocumentDto } from "@db/api"
+import { DocumentDto, DocumentUpdateDto } from "@db/api"
 import { css, html } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
 import * as docService from "@db/client/views/documents/docsService.js"
@@ -46,8 +46,7 @@ export class UsersList extends AuthUserElement {
   saveDoc() {
     if (!this.docid || !this.doc)
       return
-    const doc:DocumentDto = {
-      id: this.docid,
+    const doc: DocumentUpdateDto = {
       title: this.doc?.title,
       content: this.contentEdit
     }

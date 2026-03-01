@@ -11,7 +11,9 @@ public static class DocumentsTranslate
         {
             Id = doc.Id,
             Title = doc.Title,
-            Content = doc.Content
+            Content = doc.Content,
+            CreatedAt = doc.CreatedAt,
+            CreatedByUserId = doc.CreatedByUserId
         };
     }
 
@@ -25,7 +27,9 @@ public static class DocumentsTranslate
             return new DocumentListDto
             {
                 Id = d.Id,
-                Title = d.Title
+                Title = d.Title,
+                CreatedAt = d.CreatedAt,
+                CreatedByUserId = d.CreatedByUserId
             };
         })];
     }

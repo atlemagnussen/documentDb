@@ -30,7 +30,7 @@ public class DocumentsService
         return doc;
     }
 
-    public async Task<Document> Update(int id, DocumentDto dto)
+    public async Task<Document> Update(int id, DocumentUpdateDto dto)
     {
         var doc = await Documents.FirstOrDefaultAsync(d => d.Id == id) 
             ?? throw new NotFoundException($"{id} not found");
@@ -38,6 +38,20 @@ public class DocumentsService
         doc.Title = dto.Title;
         doc.Content = dto.Content;
 
+        await _context.SaveChangesAsync();
+        return doc;
+    }
+
+    public async Task<Document> Create(DocumentCreateDto create, string createdByUserId)
+    {
+        var doc = new Document
+        {
+            Title = create.Title,
+            Content = create.Content,
+            CreatedByUserId = createdByUserId
+        };
+
+        await _context.Documents.AddAsync(doc);
         await _context.SaveChangesAsync();
         return doc;
     }
