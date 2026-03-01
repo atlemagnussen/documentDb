@@ -6,6 +6,7 @@ export interface AuthUser {
     userName?: string
     fullName?: string
     initials?: string
+    roles?: Array<string>
 }
 
 export const userState = new Signal.State<AuthUser>({})
@@ -15,7 +16,8 @@ export function setAuthUser(oidcUser: User) {
         accessToken: oidcUser.access_token,
         userName: oidcUser.profile.name,
         fullName: oidcUser.profile.fullname as string ?? "",
-        initials: "NA"
+        initials: "NA",
+        roles: getRolesFromProfile(oidcUser.profile)
     }
     authUser.initials = getInitials(authUser.fullName)
     userState.set(authUser)
@@ -39,4 +41,19 @@ function getInitials(fullName?: string | null) {
 
     const initials = `${firstInitial}${lastInitial}`.trim()
     return initials || "NA"
+}
+
+function getRolesFromProfile(profile: Record<string, unknown>) {
+    const rolesValue = profile.roles ?? profile.role
+    if (!rolesValue) return []
+
+    if (Array.isArray(rolesValue)) {
+        return rolesValue.filter((role): role is string => typeof role === "string")
+    }
+
+    if (typeof rolesValue === "string") {
+        return [rolesValue]
+    }
+
+    return []
 }
