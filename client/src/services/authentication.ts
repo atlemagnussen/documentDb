@@ -33,6 +33,7 @@ function setupEvents() {
         setAuthUser(user)
     })
     manager.events.addUserUnloaded(() => {
+        setUserLoggedOut()
         logDebug("user unloaded. Session terminated. user: ")
     })
     manager.events.addUserSignedIn(() => {
@@ -124,7 +125,9 @@ async function initialize(loggedOutUrl?: string, webStorage?: any) {
 }
 function signOut() {
     logDebug("sign out")
-    manager.signoutRedirect()
+    manager.signoutSilent({
+        state: location.href
+    })
 }
 function log(msg: string) {
     console.log(`${logPrefix} ${msg}`)
