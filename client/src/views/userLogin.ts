@@ -26,7 +26,7 @@ export class UserLogin extends AuthUserElement {
     return html`
       <wa-dropdown @wa-select=${this.onUserSelect}>
         <wa-avatar slot="trigger"
-          label="WA" shape="circle" initials="AM">
+          label="WA" shape="circle" initials="${this.user.initials!}">
         </wa-avatar>
 
         <wa-dropdown-item value="share">
