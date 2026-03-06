@@ -3,7 +3,7 @@ import { css, html } from "lit"
 import { customElement, property, state } from "lit/decorators.js"
 import * as docService from "@db/client/views/documents/docsService.js"
 import { AuthUserElement } from "@db/client/components/AuthUserElement.js"
-
+import toastService from "@db/client/components/toast/index.js"
 
 @customElement("doc-edit")
 export class UsersList extends AuthUserElement {
@@ -51,6 +51,7 @@ export class UsersList extends AuthUserElement {
       content: this.contentEdit
     }
     docService.update(this.docid, doc)
+    toastService.success("saved")
   }
   render() {
     if (!this.doc) {

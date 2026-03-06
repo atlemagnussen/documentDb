@@ -8,6 +8,7 @@ import "./views/documents/index.js"
 
 import "./components/errorPdViewer.js"
 import "./components/richText.js"
+import './components/toast/toastMaster.js';
 
 import auth from "@db/client/services/authentication.js"
 
