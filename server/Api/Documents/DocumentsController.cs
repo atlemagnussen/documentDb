@@ -25,10 +25,17 @@ public class DocumentsController : ControllerBase
         return DocumentsTranslate.List(docs);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("byid/{id}")]
     public async Task<DocumentDto> Get(int id)
     {
         var doc = await  _service.Get(id);
+        return DocumentsTranslate.From(doc);
+    }
+
+    [HttpGet("{slug}")]
+    public async Task<DocumentDto> GetSlug(string slug)
+    {
+        var doc = await  _service.GetSlug(slug);
         return DocumentsTranslate.From(doc);
     }
 

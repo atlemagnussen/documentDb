@@ -14,6 +14,9 @@ public class DocumentListDto
     [MaxLength(255)]
     public required string Title { get; set; }
 
+    [MaxLength(255)]
+    public required string Slug { get; set; }
+
     public DateTimeOffset CreatedAt { get; set; }
     public required string CreatedByUserId { get; set; }
 }

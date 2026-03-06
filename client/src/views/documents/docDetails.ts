@@ -21,7 +21,7 @@ export class UsersList extends LitElement {
   }
 
   @property({ attribute: true })
-  docid?: string
+  slug?: string
 
   @state()
   doc?: DocumentDto
@@ -30,10 +30,10 @@ export class UsersList extends LitElement {
   error?: Error
 
   get = async () => {
-    if (!this.docid)
+    if (!this.slug)
       return
     try {
-      const doc = await docService.get(this.docid)
+      const doc = await docService.get(this.slug)
       this.doc = doc
     } catch (err: any) {
       this.error = err

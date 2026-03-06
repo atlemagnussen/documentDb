@@ -63,7 +63,7 @@ export class UsersList extends AuthUserElement {
 			<div>
 				<p>No result</p>
 				<button @click=${this.get}>Get Dbs</button>
-        <error-viewer .error=${this.error}></error-viewer>
+       			<error-viewer .error=${this.error}></error-viewer>
 			</div>
 			`
 		}
@@ -83,7 +83,7 @@ export class UsersList extends AuthUserElement {
 							return html`
 								<tr>
 									<td>
-                    <a href="/documents/${u.id}">
+                    <a href="/documents/${u.slug}">
                       ${u.title}
                     </a>
                   </td>

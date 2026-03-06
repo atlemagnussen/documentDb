@@ -7,8 +7,11 @@ export function list() {
     return apiService.get<Array<DocumentDto>>(basePath)
 }
 
-export function get(id: string) {
-    return apiService.get<DocumentDto>(`${basePath}/${id}`)
+export function getById(id: string) {
+    return apiService.get<DocumentDto>(`${basePath}/byid/${id}`)
+}
+export function get(slug: string) {
+    return apiService.get<DocumentDto>(`${basePath}/${slug}`)
 }
 
 export function create(doc: DocumentCreateDto) {

@@ -17,6 +17,8 @@ public class DocumentsDbContext : DbContext
         modelBuilder.Entity<Document>(entity =>
         {
             entity.Property(e => e.Title).HasMaxLength(255);
+            entity.Property(e => e.Slug).HasMaxLength(255);
+            entity.HasIndex(e => e.Slug).IsUnique();
             entity.Property(e => e.Content).HasColumnType("text");
             entity.Property(e => e.CreatedAt)
                 .HasColumnType("timestamptz")

@@ -11,6 +11,7 @@ public static class DocumentsTranslate
         {
             Id = doc.Id,
             Title = doc.Title,
+            Slug = doc.Slug,
             Content = doc.Content,
             CreatedAt = doc.CreatedAt,
             CreatedByUserId = doc.CreatedByUserId
@@ -28,6 +29,7 @@ public static class DocumentsTranslate
             {
                 Id = d.Id,
                 Title = d.Title,
+                Slug = d.Slug,
                 CreatedAt = d.CreatedAt,
                 CreatedByUserId = d.CreatedByUserId
             };

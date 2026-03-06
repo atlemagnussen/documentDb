@@ -12,6 +12,13 @@ import { dropCursor } from "prosemirror-dropcursor"
 import { gapCursor } from "prosemirror-gapcursor"
 
 type Command = (state: EditorState, dispatch?: EditorView["dispatch"], view?: EditorView) => boolean
+type MenuItem = {
+  label: string
+  icon: string
+  command?: () => Command
+  onClick?: () => void
+  isDisabled?: () => boolean
+}
 
 const editorSchema = new Schema({
   nodes: addListNodes(basicSchema.spec.nodes, "paragraph block*", "block"),
@@ -30,6 +37,13 @@ function serializeDocToHtml(state: EditorState) {
   const fragment = serializer.serializeFragment(state.doc.content)
   const container = document.createElement("div")
   container.appendChild(fragment)
+
+  // Ensure all serialized links open in a new tab with safe opener behavior.
+  container.querySelectorAll<HTMLAnchorElement>("a[href]").forEach(anchor => {
+    anchor.setAttribute("target", "_blank")
+    anchor.setAttribute("rel", "noopener noreferrer")
+  })
+
   return container.innerHTML
 }
 
@@ -88,7 +102,7 @@ export class RichTextEditor extends LitElement {
   private editorView?: EditorView
   private applyingExternalContent = false
 
-  private menuItems = [
+  private menuItems: MenuItem[] = [
     {
       label: "Bold",
       icon: "bold",
@@ -98,6 +112,16 @@ export class RichTextEditor extends LitElement {
       label: "Italic",
       icon: "italic",
       command: () => toggleMark(editorSchema.marks.em)
+    },
+    {
+      label: "Insert link",
+      icon: "link",
+      onClick: () => this.insertLink(),
+      isDisabled: () => {
+        const linkMark = editorSchema.marks.link
+        if (!linkMark) return true
+        return !this.commandEnabled(toggleMark(linkMark, { href: "https://" }))
+      }
     },
     {
       label: "Paragraph",
@@ -187,6 +211,27 @@ export class RichTextEditor extends LitElement {
     return command(view.state)
   }
 
+  private insertLink() {
+    const view = this.editorView
+    if (!view) return
+
+    const linkMark = editorSchema.marks.link
+    if (!linkMark) return
+
+    const selectedLink = linkMark.isInSet(view.state.selection.$from.marks())
+    const defaultHref = selectedLink?.attrs.href ?? "https://"
+    const hrefInput = window.prompt("Enter URL", defaultHref)
+    if (hrefInput === null) return
+
+    const href = hrefInput.trim()
+    if (!href) {
+      this.runCommand(toggleMark(linkMark))
+      return
+    }
+
+    this.runCommand(toggleMark(linkMark, { href, title: href }))
+  }
+
   firstUpdated() {
     const editorHost = this.renderRoot.querySelector<HTMLDivElement>("#editor")
     if (!editorHost) return
@@ -231,14 +276,24 @@ export class RichTextEditor extends LitElement {
     return html`
       <div class="toolbar">
         ${this.menuItems.map(item => {
-          const command = item.command()
+          const command = item.command?.()
+          const disabled = item.isDisabled ? item.isDisabled() : command ? !this.commandEnabled(command) : false
           return html`
             <wa-button
               size="small"
               variant="neutral"
               appearance="filled"
-              ?disabled=${!this.commandEnabled(command)}
-              @click=${() => this.runCommand(command)}
+              title=${item.label}
+              aria-label=${item.label}
+              ?disabled=${disabled}
+              @click=${() => {
+                if (item.onClick) {
+                  item.onClick()
+                  return
+                }
+
+                if (command) this.runCommand(command)
+              }}
             >
               <wa-icon name=${item.icon} variant="solid"></wa-icon>
             </wa-button>

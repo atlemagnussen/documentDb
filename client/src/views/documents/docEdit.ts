@@ -30,7 +30,7 @@ export class UsersList extends AuthUserElement {
     if (!this.docid)
       return
     try {
-      const doc = await docService.get(this.docid)
+      const doc = await docService.getById(this.docid)
       this.doc = doc
       this.contentEdit = doc.content
     } catch (err: any) {

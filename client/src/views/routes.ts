@@ -18,7 +18,7 @@ export const routes: Array<RouteConfig> = [
         render: ({id}) => {
             if (!id)
                 return html`<p>Loading</p>`
-            return html`<doc-details docid="${id}"></doc-details>`
+            return html`<doc-details slug="${id}"></doc-details>`
         }
     },
     {
