@@ -24,7 +24,8 @@ jobs:
           fi
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           IMAGE_NAME="dev.logout.work/empire/docstore"
-          echo "Building $IMAGE_NAME with version: $VERSION"
+          echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_ENV
+          echo "Building $IMAGE_NAME : $VERSION"
       
       - name: Log in to Registry
         run: |
