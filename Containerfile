@@ -19,7 +19,7 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY . .
 
-RUN mkdir -p UserAdmin/server/wwwroot
+RUN mkdir -p server/wwwroot
 WORKDIR "/src/server/wwwroot"
 COPY --from=buildnode /usr/server/wwwroot .
 
