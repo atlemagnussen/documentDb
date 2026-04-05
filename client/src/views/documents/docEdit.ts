@@ -71,6 +71,8 @@ export class UsersList extends AuthUserElement {
       <label>Edit</label>
       <rich-text
         .content=${this.contentEdit ?? ""}
+        .allowMarkdown=${false}
+        .allowHtmlSource=${true}
         @content-change=${this.onContentChange}
       ></rich-text>
       <wa-button variant="neutral" appearance="filled" @click=${this.saveDoc}>

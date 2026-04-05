@@ -10,7 +10,8 @@ const modulesToLoad = [
     "/components/callout/callout.js",    // wa-callout
     "/components/dialog/dialog.js",      // wa-dialog
     "/components/select/select.js",      // wa-select
-    "/components/dropdown/dropdown.js"   // wa-dropdown
+    "/components/dropdown/dropdown.js",  // wa-dropdown
+    "/components/textarea/textarea.js"   // wa-textarea
 ]
 
 const baseUrlWa = "https://static.logout.work/webawesome/3.2.1/dist"
