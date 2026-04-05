@@ -51,7 +51,7 @@ export class UsersList extends LitElement {
 
     .doc-content tbody tr:nth-child(even) td,
     .doc-content tbody tr:nth-child(even) th {
-      background: var(--wa-color-surface-raised);
+      background: var(--wa-color-surface-lowered);
     }
   `
   connectedCallback(): void {

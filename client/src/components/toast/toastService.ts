@@ -2,197 +2,196 @@
 import { Signal } from "signal-polyfill"
 import { ToastMaster } from "./toastMaster.js"
 
-export type ToastType = "info" | "success" | "error" | "warning" 
+export type ToastType = "info" | "success" | "error" | "warning"
 export type ToastSize = "normal" | "big"
 
 export function getTimestampId() {
-    const random = Math.floor(Math.random() * 1000)
-    return `T${Date.now()}${random}`
+  const random = Math.floor(Math.random() * 1000)
+  return `T${Date.now()}${random}`
 }
 
 export class Toast {
-    /**
-     * @constructor
-     * @param type    Toast type
-     * @param content Content, can be HTML
-     * @param {number} [seconds=10] Time in seconds when the toast will destroy. 0 will disable auto destroy
-     */
-    constructor(type: ToastType, content: string, seconds: number = 10) {
-        this.id = getTimestampId() // random id to keep track
-        this.type = type
-        this.content = content
-        this.setDestroyTime(seconds)
-    }
-    id: string
-    type: ToastType
+  /**
+   * @constructor
+   * @param type    Toast type
+   * @param content Content, can be HTML
+   * @param {number} [seconds=10] Time in seconds when the toast will destroy. 0 will disable auto destroy
+   */
+  constructor(type: ToastType, content: string, seconds: number = 10) {
+    this.id = getTimestampId() // random id to keep track
+    this.type = type
+    this.content = content
+    this.setDestroyTime(seconds)
+  }
+  id: string
+  type: ToastType
 
-    private _content = ""
-    /**
-     * Change content after toast is created
-     */
-    set content(c: string) {
-        this._content = c
-        this.changedCallback ? this.changedCallback() : null
-    }
-    get content() {
-        return this._content
-    }
+  private _content = ""
+  /**
+   * Change content after toast is created
+   */
+  set content(c: string) {
+    this._content = c
+    this.changedCallback ? this.changedCallback() : null
+  }
+  get content() {
+    return this._content
+  }
 
-    customIcon = ""
+  customIcon = ""
 
-    private destroyTimer = 0
-    private destroyTimeSeconds = 10
-    /**
-     * Set new destroy time, 0 will disable auto destroy
-     * @param seconds 
-     */
-    setDestroyTime(seconds: number) {
-        if (this.destroyTimer)
-            window.clearTimeout(this.destroyTimer)
+  private destroyTimer = 0
+  private destroyTimeSeconds = 10
+  /**
+   * Set new destroy time, 0 will disable auto destroy
+   * @param seconds 
+   */
+  setDestroyTime(seconds: number) {
+    if (this.destroyTimer)
+      window.clearTimeout(this.destroyTimer)
 
-        if (seconds) {
-            this.destroyTimeSeconds = seconds
-            this.destroyTimer = window.setTimeout(() => {
-                this.destroyCallback ? this.destroyCallback() : null
-            }, this.destroyTimeSeconds * 1000);
-        }
+    if (seconds) {
+      this.destroyTimeSeconds = seconds
+      this.destroyTimer = window.setTimeout(() => {
+        this.destroyCallback ? this.destroyCallback() : null
+      }, this.destroyTimeSeconds * 1000);
     }
-    /**
-     * Destroy the toast now
-     */
-    async destroyNow() {
-        if (this.destroyCallback)
-            return this.destroyCallback()
-    }
-    destroyCallback?: () => Promise<any>
+  }
+  /**
+   * Destroy the toast now
+   */
+  async destroyNow() {
+    if (this.destroyCallback)
+      return this.destroyCallback()
+  }
+  destroyCallback?: () => Promise<any>
 
-    size: ToastSize = "normal"
-    
-    changedCallback?: Function
+  size: ToastSize = "normal"
+
+  changedCallback?: Function
 }
 
 export class ToastService {
-    /**
-     * Create a new Toast type Info
-     * @example
-     * toaster.info("<strong>header in bold</strong><br>more text", 5) // bold header
-     * @param msg labelkey, plain text or HTML.
-     * @param seconds time before toast destroys in seconds. Default is 10
-     */
-    info(msg: string, seconds: number = 10) {
-        return this.addToast("info", msg, seconds)
-    }
-    /**
-     * Create a new Toast type Error
-     * @example
-     * toaster.error("<strong>Error occured</strong><br>missing field", 15)
-     * @param msg labelkey,plain text or HTML.
-     * @param seconds time before toast destroys in seconds. Default is 20
-     */
-    error(msg: string, seconds: number = 20) {
-        return this.addToast("error", msg, seconds)
-    }
-    /**
-     * Create a new Toast type Success
-     * @example
-     * toaster.success("<strong>Success</strong><br>Created task")
-     * toaster.success("PDF created")
-     * @param msg labelkey, plain text or HTML.
-     * @param seconds time before toast destroys in seconds. Default is 10
-     */
-    success(msg: string, seconds: number = 10) {
-        return this.addToast("success", msg, seconds)
-    }
-    /**
-     * Create a new Toast type Warning
-     * @example
-     * const toast = toaster.warning("This is a warning")
-     * @param msg labelkey, plain text or HTML.
-     * @param seconds time before toast destroys in seconds. Default is 10. 0 means no self destroy
-     */
-    warning(msg: string, seconds: number = 10) {
-        return this.addToast("warning", msg, seconds)
-    }
-    /**
-     * Create a new Toast type Loading with a loading animated icon
-     * @example
-     * const toast = toaster.loading("PDF is creating")
-     * toast.destroyNow()
-     * @param msg labelkey, plain text or HTML.
-     * @param seconds time before toast destroys in seconds. Default 0 (No self destroy)
-     */
-    loading(msg: string) {
-        const toast = this.addToast("info", msg, 100)
-        toast.customIcon = "<digilean-working></digilean-working>"
-        return toast
-    }
-    /**
-     * Create a new Toast 
-     * @example
-     * const toast = toaster.addToast("error", "This is a toast", 10)
-     * @param msg labelkey, plain text or HTML.
-     * @param seconds time before toast destroys in seconds.
-     */
-    addToast(type: ToastType, content: string, seconds: number) {
-        const toast = new Toast(type, content, seconds)
-        toastStore.add(toast)
-        return toast
-    }
-    /**
-     * Removes the toast from the internal list.
-     * To remove toast properly use @see {@link Toast.destroyNow}
-     * @param id the autogenerated id of a toast
-     */
-    removeToast(id: string) {
-        toastStore.remove(id)
-    }
+  /**
+   * Create a new Toast type Info
+   * @example
+   * toaster.info("<strong>header in bold</strong><br>more text", 5) // bold header
+   * @param msg labelkey, plain text or HTML.
+   * @param seconds time before toast destroys in seconds. Default is 10
+   */
+  info(msg: string, seconds: number = 10) {
+    return this.addToast("info", msg, seconds)
+  }
+  /**
+   * Create a new Toast type Error
+   * @example
+   * toaster.error("<strong>Error occured</strong><br>missing field", 15)
+   * @param msg labelkey,plain text or HTML.
+   * @param seconds time before toast destroys in seconds. Default is 20
+   */
+  error(msg: string, seconds: number = 20) {
+    return this.addToast("error", msg, seconds)
+  }
+  /**
+   * Create a new Toast type Success
+   * @example
+   * toaster.success("<strong>Success</strong><br>Created task")
+   * toaster.success("PDF created")
+   * @param msg labelkey, plain text or HTML.
+   * @param seconds time before toast destroys in seconds. Default is 10
+   */
+  success(msg: string, seconds: number = 10) {
+    return this.addToast("success", msg, seconds)
+  }
+  /**
+   * Create a new Toast type Warning
+   * @example
+   * const toast = toaster.warning("This is a warning")
+   * @param msg labelkey, plain text or HTML.
+   * @param seconds time before toast destroys in seconds. Default is 10. 0 means no self destroy
+   */
+  warning(msg: string, seconds: number = 10) {
+    return this.addToast("warning", msg, seconds)
+  }
+  /**
+   * Create a new Toast type Loading with a loading animated icon
+   * @example
+   * const toast = toaster.loading("PDF is creating")
+   * toast.destroyNow()
+   * @param msg labelkey, plain text or HTML.
+   * @param seconds time before toast destroys in seconds. Default 0 (No self destroy)
+   */
+  loading(msg: string) {
+    const toast = this.addToast("info", msg, 100)
+    toast.customIcon = "<digilean-working></digilean-working>"
+    return toast
+  }
+  /**
+   * Create a new Toast 
+   * @example
+   * const toast = toaster.addToast("error", "This is a toast", 10)
+   * @param msg labelkey, plain text or HTML.
+   * @param seconds time before toast destroys in seconds.
+   */
+  addToast(type: ToastType, content: string, seconds: number) {
+    const toast = new Toast(type, content, seconds)
+    toastStore.add(toast)
+    return toast
+  }
+  /**
+   * Removes the toast from the internal list.
+   * To remove toast properly use @see {@link Toast.destroyNow}
+   * @param id the autogenerated id of a toast
+   */
+  removeToast(id: string) {
+    toastStore.remove(id)
+  }
 }
 
 export const toastState = new Signal.State<Array<Toast>>([])
 
 class ToastListStore {
-    /**
-     *
-     */
-    constructor() {
-        this.toastMaster = document.createElement("toast-master") as ToastMaster
-        document.body.appendChild(this.toastMaster)
-        this.toastMaster.setAttribute("popover", "manual")
-    }
+  /**
+   *
+   */
+  constructor() {
+    this.toastMaster = document.createElement("toast-master") as ToastMaster
+    document.body.appendChild(this.toastMaster)
+    this.toastMaster.setAttribute("popover", "manual")
+  }
 
-    toastMaster: ToastMaster
+  toastMaster: ToastMaster
 
-    showToastMaster() {
-        const isShowing = this.toastMaster.matches(":popover-open")
-        if (!isShowing)
-            this.toastMaster.showPopover()
-    }
-    hideToastMaster() {
-        const isShowing = this.toastMaster.matches(":popover-open")
-        if (isShowing)
-            this.toastMaster.hidePopover()
-    }
-    add(toast:Toast) {
-        const list = structuredClone(toastState.get())
-        list.push(toast)
-        toastState.set(list)
-        this.showToastMaster()
-    }
+  showToastMaster() {
+    const isShowing = this.toastMaster.matches(":popover-open")
+    if (!isShowing)
+      this.toastMaster.showPopover()
+  }
+  hideToastMaster() {
+    const isShowing = this.toastMaster.matches(":popover-open")
+    if (isShowing)
+      this.toastMaster.hidePopover()
+  }
+  add(toast: Toast) {
+    const list = toastState.get()
+    toastState.set([...list, toast])
+    this.showToastMaster()
+  }
 
-    remove(id: string) {
-        const list = toastState.get()
-        const index = list.findIndex(t => t.id == id)
-        if (index > -1) {
-            list.splice(index, 1)
-            toastState.set(list)
-        }
-        if (list.length === 0)
-            this.hideToastMaster()
+  remove(id: string) {
+    const list = toastState.get()
+    const index = list.findIndex(t => t.id == id)
+    if (index > -1) {
+      list.splice(index, 1)
+      toastState.set([...list])
     }
+    if (list.length === 0)
+      this.hideToastMaster()
+  }
 
-    reset(){
-        toastState.set([])
-    }
+  reset() {
+    toastState.set([])
+  }
 }
 
 export const toastStore = new ToastListStore()

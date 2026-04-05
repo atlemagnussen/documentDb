@@ -11,7 +11,7 @@ export interface AuthUser {
 
 export const userState = new Signal.State<AuthUser>({})
 
-type Theme = "dark" | "light"
+export type Theme = "dark" | "light"
 
 function getStoredTheme(): Theme {
     const stored = localStorage.getItem("wa-theme")
@@ -20,9 +20,8 @@ function getStoredTheme(): Theme {
 
 function applyTheme(theme: Theme) {
     const html = document.documentElement
-    const oppositeTheme = theme === "dark" ? "light" : "dark"
-    html.classList.remove(`wa-${oppositeTheme}`)
-    html.classList.add(`wa-${theme}`)
+    const isDark = (theme === "dark")
+    html.classList.toggle("wa-dark", isDark)
 }
 
 export const themeState = new Signal.State<Theme>(getStoredTheme())

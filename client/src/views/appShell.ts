@@ -23,7 +23,7 @@ export class UsersList extends LitElement {
       flex-direction: row;
       padding: var(--wa-space-2xs);
       overflow: hidden;
-      background-color: var(--wa-color-surface-raised);
+      background-color: var(--wa-color-surface-lowered);
     }
 
     main {

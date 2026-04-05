@@ -1,7 +1,7 @@
 import { LitElement, html, css } from "lit"
 import { customElement, state } from "lit/decorators.js"
 import { Toast } from "./index.js"
-import "./toastComponent"
+import "./toastComponent.js"
 import { ToastComponent } from "./toastComponent.js"
 import toastService, { toastsState } from "./index.js"
 import { effect } from "@db/client/services/effect.js"
