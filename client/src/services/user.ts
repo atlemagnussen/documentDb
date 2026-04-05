@@ -11,6 +11,36 @@ export interface AuthUser {
 
 export const userState = new Signal.State<AuthUser>({})
 
+type Theme = "dark" | "light"
+
+function getStoredTheme(): Theme {
+    const stored = localStorage.getItem("wa-theme")
+    return stored === "light" ? "light" : "dark"
+}
+
+function applyTheme(theme: Theme) {
+    const html = document.documentElement
+    const oppositeTheme = theme === "dark" ? "light" : "dark"
+    html.classList.remove(`wa-${oppositeTheme}`)
+    html.classList.add(`wa-${theme}`)
+}
+
+export const themeState = new Signal.State<Theme>(getStoredTheme())
+
+applyTheme(getStoredTheme())
+
+export function setTheme(theme: Theme) {
+    themeState.set(theme)
+    localStorage.setItem("wa-theme", theme)
+    applyTheme(theme)
+}
+
+export function toggleTheme() {
+    const current = themeState.get()
+    const next = current === "dark" ? "light" : "dark"
+    setTheme(next)
+}
+
 export function setAuthUser(oidcUser: User) {
     const authUser: AuthUser = { 
         accessToken: oidcUser.access_token,

@@ -23,21 +23,35 @@ export class UsersList extends LitElement {
       width: 100%;
       border-collapse: collapse;
       table-layout: fixed;
-      margin: 0.5rem 0 1rem;
+      margin: 0.5rem 0 0.5rem;
     }
 
     .doc-content th,
     .doc-content td {
       border: 1px solid var(--wa-color-border-normal, #d6d6d6);
-      padding: 0.45rem 0.55rem;
+      padding: 0.4rem;
       vertical-align: top;
       text-align: left;
       word-break: break-word;
+      p {
+        margin-block-start: 0;
+        margin-block-end: 0;
+      }
     }
 
     .doc-content thead th {
-      background: var(--wa-color-surface-lowered, #2a2a2a);
+      background: var(--wa-color-surface-lowered);
       font-weight: 600;
+    }
+
+    .doc-content tbody tr:nth-child(odd) td,
+    .doc-content tbody tr:nth-child(odd) th {
+      background: var(--wa-color-surface-default);
+    }
+
+    .doc-content tbody tr:nth-child(even) td,
+    .doc-content tbody tr:nth-child(even) th {
+      background: var(--wa-color-surface-raised);
     }
   `
   connectedCallback(): void {
