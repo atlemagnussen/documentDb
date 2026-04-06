@@ -17,6 +17,7 @@ export class HomeView extends AuthUserElement {
       return html`
         <p>Not logged in</p>
         <button @click=${() => auth.login()}>Log in</button>
+        <a href="/speech">Speech API</a>
       `
     }
     return html`
@@ -28,6 +29,7 @@ export class HomeView extends AuthUserElement {
       </div>
       <div>
         <a href="/documents">Documents</a>
+        <a href="/speech">Speech API</a>
       </div>
     `
   }

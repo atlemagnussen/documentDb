@@ -31,6 +31,11 @@ export const routes: Array<RouteConfig> = [
         }
     },
     {
+        name: "speech",
+        path: "/speech",
+        render: () => html`<speech-test></speech-test>`
+    },
+    {
         name: "notfound",
         path: "*",
         render: () => html`<p>Not found</p>`
